@@ -1,6 +1,5 @@
 import pygame
 
-
 from gameboard import Board
 from actions import Actions
 import G_vars
@@ -8,6 +7,7 @@ import G_vars
 
 def main():
 
+    #Inicialize board and actions
     board = Board()
     actions = Actions()
 
@@ -34,9 +34,7 @@ def main():
         pygame.display.flip()
         board.time.tick(G_vars.FPS)
 
-               
-
-        
+                    
 if __name__ == "__main__":
     main()
             

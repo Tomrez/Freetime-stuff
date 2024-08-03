@@ -6,6 +6,7 @@ import time
 import G_vars
 from object import Object
 from enums import Shapes
+from enums import Colors
 
 
 class Board():
@@ -16,8 +17,10 @@ class Board():
         self.time = pygame.time.Clock()
         self.screen = pygame.display.set_mode((G_vars.WIDTH, G_vars.HEIGHT))
         self.filled_squares = numpy.zeros((20, 10))
+        self.filled_squares_colors = numpy.zeros((20, 10, 3), dtype=numpy.uint8)
         new_shape = self.get_new_shape()
-        self.active_object = Object(new_shape)
+        new_color = self.get_new_color()
+        self.active_object = Object(new_shape, new_color)
         self.last_move_time = time.time()
 
 
@@ -28,6 +31,15 @@ class Board():
         index = random.randint(0, 66666) % len(shapes.shapes)
         shape = shapes.shapes[index].copy()
         return shape
+    
+
+    # Function returns random color from colors enum
+    def get_new_color(self):
+        colors = Colors()
+        random.seed(a=None, version=2)
+        index = random.randint(0, 66666) % len(colors.colors)
+        color = colors.colors[index]
+        return color
 
 
     # Function draw grid on the screen
@@ -40,13 +52,13 @@ class Board():
 
     # Function to draw single squares
     def draw_square(self, x, y, color):
-        pygame.draw.rect(self.screen, G_vars.OBJECT_COLOR, (x * G_vars.BLOCK, y * G_vars.BLOCK, G_vars.BLOCK, G_vars.BLOCK))
+        pygame.draw.rect(self.screen, color, (x * G_vars.BLOCK, y * G_vars.BLOCK, G_vars.BLOCK, G_vars.BLOCK))
 
 
     # Function to draw active object
     def draw_object(self):
         for coord in self.active_object.shape:
-            self.draw_square(coord[0], coord[1], G_vars.OBJECT_COLOR)
+            self.draw_square(coord[0], coord[1], self.active_object.color)
 
 
     # Function draw already placed objects
@@ -54,7 +66,7 @@ class Board():
         for i in range(20):
             for j in range(10):
                 if self.filled_squares[i][j] == 1:
-                    self.draw_square(j, i, G_vars.OBJECT_COLOR)
+                    self.draw_square(j, i, self.filled_squares_colors[i][j])
 
 
     # Function to check, if the STEP_TIME already expired and is time to move
