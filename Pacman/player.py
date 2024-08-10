@@ -4,8 +4,8 @@ import G_vars as Gs
 class Player():
 
     def __init__(self) -> None:
-        self.x = 25
-        self.y = 12
+        self.x = Gs.PACMAN_X
+        self.y = Gs.PACMAN_Y
         self.color = Gs.PACMAN_COLOR
         self.score = 0
 
